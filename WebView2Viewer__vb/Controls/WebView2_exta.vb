@@ -1,0 +1,120 @@
+﻿Imports System
+Imports System.ComponentModel
+Imports System.Drawing
+Imports System.Windows.Forms
+Imports Microsoft.Web.WebView2.Core
+Imports Microsoft.Web.WebView2.WinForms
+
+
+
+Public NotInheritable Class WebView2_exta : Inherits WebView2
+    Private Shared _wv2ex As WebView2_exta
+    Private Shared _cwv2 As CoreWebView2
+
+    Public Shared Sub ClearFrom(pnl As Panel)
+        If _wv2ex Is Nothing Then
+            Return
+        Else
+            pnl.SuspendLayout()
+
+            _wv2ex.Stop()
+            Try
+                _wv2ex.Source = New Uri("about:blank")
+            Catch
+            End Try
+            _wv2ex = Nothing
+
+            For Each ctr As Control In pnl.Controls
+                Try
+                    ctr.Dispose()
+                Catch
+                End Try
+            Next
+            pnl.Controls.Clear()
+
+            pnl.ResumeLayout(False)
+            pnl.PerformLayout()
+
+            GC.WaitForPendingFinalizers()
+            GC.Collect()
+        End If
+    End Sub
+
+    Private Shared Sub prCreateFrom(pnl As Panel)
+        ClearFrom(pnl)
+
+        _wv2ex = New WebView2_exta()
+        CType(_wv2ex, ISupportInitialize).BeginInit()
+        pnl.SuspendLayout()
+
+        _wv2ex.AllowExternalDrop = True
+        _wv2ex.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
+        _wv2ex.CreationProperties = Nothing
+        _wv2ex.DefaultBackgroundColor = Color.White
+        _wv2ex.Dock = DockStyle.Fill
+        _wv2ex.Name = "WebView21"
+        _wv2ex.TabIndex = 0
+        _wv2ex.ZoomFactor = 1.0R
+        pnl.Controls.Add(_wv2ex)
+
+        CType(_wv2ex, ISupportInitialize).EndInit()
+        pnl.ResumeLayout(False)
+        pnl.PerformLayout()
+
+        AddHandler _wv2ex.CoreWebView2InitializationCompleted, AddressOf prCoreWebView2InitializationCompleted
+        prEnsureCoreWebView2Async()
+    End Sub
+
+    Private Shared Sub prCoreWebView2InitializationCompleted(sd As Object, ea As CoreWebView2InitializationCompletedEventArgs)
+        If ea.IsSuccess Then
+            _cwv2 = _wv2ex.CoreWebView2
+            Dim cwvss As CoreWebView2Settings = _cwv2.Settings
+            cwvss.IsPinchZoomEnabled = False
+            cwvss.IsZoomControlEnabled = False
+            _cwv2.AddScriptToExecuteOnDocumentCreatedAsync("
+window.addEventListener('mousedown',
+    (e) => {
+        if (e.button === 0) {
+            console.log(e);   
+        }
+    });
+            ".Trim())
+
+            AddHandler _cwv2.ContextMenuRequested, AddressOf prContextMenuRequested
+        End If
+    End Sub
+
+    Private Shared Sub prContextMenuRequested(sd As Object, ea As CoreWebView2ContextMenuRequestedEventArgs)
+        ea.Handled = True
+    End Sub
+
+    Private Shared Async Sub prEnsureCoreWebView2Async()
+        Dim cweo As New CoreWebView2EnvironmentOptions("--disable-web-security")
+        Dim env As CoreWebView2Environment = Await CoreWebView2Environment.CreateAsync(Nothing, Nothing, cweo)
+
+        Await _wv2ex.EnsureCoreWebView2Async(env)
+    End Sub
+
+
+    Public Shared Sub OpenFrom(pnl As Panel, uri As Uri)
+        prCreateFrom(pnl)
+        _wv2ex.Source = uri
+    End Sub
+
+    Public Shared Sub OpenDevToolsWindow()
+        _cwv2?.OpenDevToolsWindow()
+    End Sub
+
+    Public Shared Sub OpenTaskManagerWindow()
+        _cwv2?.OpenTaskManagerWindow()
+    End Sub
+
+    Public Shared Sub ReloadFrom()
+        _cwv2?.Reload()
+    End Sub
+
+
+    Private Sub New()
+    End Sub
+
+End Class
