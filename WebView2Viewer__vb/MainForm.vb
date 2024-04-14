@@ -1,18 +1,21 @@
 ﻿Imports System
+Imports System.Collections.Generic
 Imports System.Collections.Specialized
 Imports System.Diagnostics
 Imports System.Drawing
-Imports System.Linq
 Imports System.IO
+Imports System.Linq
+Imports System.Runtime.InteropServices
 Imports System.Windows.Forms
 Imports WebView2Viewer__vb.Controls
 Imports WebView2Viewer__vb.Extensions
+Imports WebView2Viewer__vb.Models
 Imports WebView2Viewer__vb.Tools
 
 
 
 Public NotInheritable Class MainForm
-#Region "~~~~~~~~~~ 1) 기본설정"
+#Region "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 1) 기본설정"
     ''' <summary>
     ''' 생성자
     ''' </summary>
@@ -21,19 +24,9 @@ Public NotInheritable Class MainForm
         InitializeComponent()
 
         ' InitializeComponent() 호출 뒤에 초기화 코드를 추가하세요.
-        prTestInit()
+        prAfterInit()
     End Sub
-    Private Sub prTestInit()
-        'KeyPreview = True
-    End Sub
-    'Protected Overrides Function ProcessCmdKey(ByRef msg As Message, keyData As Keys) As Boolean
-    '    prErrorDisplay("ㅋㅋㅋㅋ")
-    '    Return MyBase.ProcessCmdKey(msg, keyData)
-    'End Function
-    'Protected Overrides Sub OnKeyDown(e As KeyEventArgs)
-    '    prErrorDisplay("ㅋㅋㅋㅋ")
-    '    MyBase.OnKeyDown(e)
-    'End Sub
+
 
     ''' <summary>
     ''' Load 이벤트
@@ -42,7 +35,7 @@ Public NotInheritable Class MainForm
     Protected Overrides Sub OnLoad(ea As EventArgs)
         MyBase.OnLoad(ea)
 
-        Text = MainProxy.GetVerInfo()
+        Text = MainProxy.GetTitleText()
         MinimumSize = Size - New Size(300, 300)
         AlignBottomRight()
         ResizeRenderCancel()
@@ -151,7 +144,7 @@ Public NotInheritable Class MainForm
                 _ips = Nothing
                 _hdp = Nothing
 
-                Text = MainProxy.GetVerInfo()
+                Text = MainProxy.GetTitleText()
                 _txbInput.Clear()
             Catch
             End Try
@@ -266,12 +259,32 @@ Public NotInheritable Class MainForm
 #End Region
 
 
-#Region "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 2) 기능성"
+
+#Region "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 2) 기능성 코드"
+    ''' <summary>
+    ''' ???
+    ''' </summary>
+    ''' <param name="fp"></param>
+    ''' <returns></returns>
     Private Function prCheckCritical(fp As String) As Boolean
         Dim excepts As String() = {".exe", ".dll", ".cmd", ".bat", ".lnk"}
         Dim ext As String = Path.GetExtension(fp)
         Return excepts.Contains(ext)
     End Function
+
+
+    ''' <summary>
+    ''' ???
+    ''' </summary>
+    ''' <param name="tp"></param>
+    ''' <param name="td"></param>
+    Private Sub prWebView2BrowserCallback(tp As String, td As String)
+        'prErrorDisplay($"{tp}, {td}")
+        If tp = "focus" Then
+            _cms?.Close()
+        End If
+    End Sub
+
 
     ''' <summary>
     ''' 파일 열기
@@ -285,12 +298,12 @@ Public NotInheritable Class MainForm
             End If
 
             Dim uri As New Uri(fp)
-            WebView2_exta.OpenFrom(_panelRoot, uri)
+            WebView2_exta.OpenFrom(_panelRoot, uri, AddressOf prWebView2BrowserCallback)
 
             _ips = fp
             _hdp = Path.GetDirectoryName(_ips)
 
-            Text = MainProxy.GetVerInfo(_ips)
+            Text = MainProxy.GetTitleText(_ips)
             _txbInput.Text = _ips
             _ofd.InitialDirectory = _hdp
         End If
@@ -303,12 +316,12 @@ Public NotInheritable Class MainForm
     ''' <param name="url"></param>
     Private Sub prOpenUrl(url As String)
         Dim uri As New Uri(url)
-        WebView2_exta.OpenFrom(_panelRoot, uri)
+        WebView2_exta.OpenFrom(_panelRoot, uri, AddressOf prWebView2BrowserCallback)
 
         _ips = url
         _hdp = Nothing
 
-        Text = MainProxy.GetVerInfo(_ips)
+        Text = MainProxy.GetTitleText(_ips)
         _txbInput.Text = _ips
         '_ofd.InitialDirectory = _hdp
     End Sub
@@ -350,9 +363,237 @@ Public NotInheritable Class MainForm
         End If
     End Sub
 
+
+    Protected Overrides Sub OnActivated(e As EventArgs)
+        MyBase.OnActivated(e)
+
+        'WebView2_exta.Activated()
+    End Sub
+
+
+    Protected Overrides Sub OnDeactivate(e As EventArgs)
+        MyBase.OnDeactivate(e)
+    End Sub
+
+
+
+
+
+    Private Sub prAfterInit()
+    End Sub
 #End Region
 
+
+
+
+
+
+
+
+
+
+
+#Region "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 3) 단축키 코드"
+    ''### 레지스트 핫키를 사용하면 다른프로그램에서 키가 십힌다 문제해결은 나중에...
+    'Private Sub prAfterInit()
+    '    'prHotkeyInits()
+
+    '    'AddHandler FormClosing,
+    '    '    Sub(sd As Object, ea As FormClosingEventArgs)
+    '    '        prHotkeyClear()
+    '    '    End Sub
+    'End Sub
+
+    'Private Sub prHotkeyInits()
+    '    'prAddHotkey(New HotkeyInfo() With {
+    '    '    .hwnd = Handle,
+    '    '    .fsModifiers = KeyModifiers.Control Or KeyModifiers.Shift,
+    '    '    .vk = Keys.Q,
+    '    '    .cbf = Sub()
+    '    '               Close()
+    '    '           End Sub
+    '    '})
+
+    '    prAddHotkey(New HotkeyInfo() With {
+    '        .hwnd = Handle,
+    '        .fsModifiers = KeyModifiers.None,
+    '        .vk = Keys.Escape,
+    '        .cbf = Sub()
+    '                   Try
+    '                       _cms.Close()
+    '                   Catch
+    '                   End Try
+    '               End Sub
+    '    })
+
+    '    prAddHotkey(New HotkeyInfo() With {
+    '        .hwnd = Handle,
+    '        .fsModifiers = KeyModifiers.Control Or KeyModifiers.Shift,
+    '        .vk = Keys.O,
+    '        .cbf = Sub()
+    '                   Try
+    '                       If (_ofd.ShowDialog(Me) = DialogResult.OK) Then
+    '                           prOpenFile(_ofd.FileName)
+    '                       End If
+    '                   Catch
+    '                   End Try
+    '               End Sub
+    '    })
+
+    '    prAddHotkey(New HotkeyInfo() With {
+    '        .hwnd = Handle,
+    '        .fsModifiers = KeyModifiers.Control Or KeyModifiers.Shift,
+    '        .vk = Keys.C,
+    '        .cbf = Sub()
+    '                   Try
+    '                       WebView2_exta.ClearFrom(_panelRoot)
+
+    '                       _ips = Nothing
+    '                       _hdp = Nothing
+
+    '                       Text = MainProxy.GetVerInfo()
+    '                       _txbInput.Clear()
+    '                   Catch
+    '                   End Try
+    '               End Sub
+    '    })
+    'End Sub
+
+    'Private _hkidcnt As Integer = _HOTKEY_ID
+    'Private _hotkeyInfos As New List(Of HotkeyInfo)
+    'Private Sub prAddHotkey(hki As HotkeyInfo)
+    '    hki.id = _hkidcnt
+    '    _hkidcnt += 1
+    '    _hotkeyInfos.Add(hki)
+    '    prRegisterHotHey(hki.hwnd, hki.id, hki.fsModifiers, hki.vk)
+    '    'prUnregisterHotKey(hki.hwnd, hki.id)
+    'End Sub
+
+    'Private Sub prHotkeyClear()
+    '    For Each hki As HotkeyInfo In _hotkeyInfos
+    '        prUnregisterHotKey(hki.hwnd, hki.id)
+    '    Next
+    '    _hotkeyInfos.Clear()
+    'End Sub
+
+    '<DllImport("user32.dll", EntryPoint:="RegisterHotKey", CharSet:=CharSet.Auto, SetLastError:=True)>
+    'Private Shared Function prRegisterHotHey(hwnd As IntPtr, id As Integer, fsModifiers As Integer, vk As Integer) As Integer
+    'End Function
+
+    '<DllImport("user32.dll", EntryPoint:="UnregisterHotKey", CharSet:=CharSet.Auto, SetLastError:=True)>
+    'Private Shared Function prUnregisterHotKey(hwnd As IntPtr, id As Integer) As Integer
+    'End Function
+
+    'Private Const _HOTKEY_ID As Integer = 31197 + 30000
+
+    'Private Enum KeyModifiers
+    '    None = 0
+    '    Alt = 1
+    '    Control = 2
+    '    Shift = 4
+    '    Windows = 8
+    'End Enum
+
+    'Private Const _WM_HOTKEY As Integer = &H312
+    'Protected Overrides Sub WndProc(ByRef m As Message)
+    '    MyBase.WndProc(m)
+
+    '    Select Case m.Msg
+    '        Case _WM_HOTKEY
+    '            ' 메인폼이 활성화 중이면
+    '            If ActiveForm Is Me Then
+    '                For Each hki As HotkeyInfo In _hotkeyInfos
+    '                    If m.WParam = CType(hki.id, IntPtr) Then
+    '                        hki.cbf()
+    '                        Exit For
+    '                    End If
+    '                Next
+    '            End If
+    '    End Select
+    'End Sub
+#End Region
+
+
+#Region "######################################################### 코드 백업"
+
+    'Protected Overrides Function ProcessCmdKey(ByRef msg As Message, keyData As Keys) As Boolean
+    '    prErrorDisplay("ㅋㅋㅋㅋ >>> " & keyData)
+    '    Return MyBase.ProcessCmdKey(msg, keyData)
+    'End Function
+
+    'Protected Overrides Function ProcessCmdKey(ByRef msg As Message, keyData As Keys) As Boolean
+    '    prErrorDisplay("ㅋㅋㅋㅋ")
+    '    Return MyBase.ProcessCmdKey(msg, keyData)
+    'End Function
+    'Protected Overrides Sub OnKeyDown(e As KeyEventArgs)
+    '    prErrorDisplay("ㅋㅋㅋㅋ")
+    '    MyBase.OnKeyDown(e)
+    'End Sub
+
+
+    'Protected Overrides Function ProcessCmdKey(ByRef msg As Message, keyData As Keys) As Boolean
+    '    Return MyBase.ProcessCmdKey(msg, keyData)
+    'End Function
+
+    'Protected Overrides Function ProcessCmdKey(ByRef msg As Message, ByVal keyData As Keys) As Boolean
+    '    Dim key As Keys = keyData And Not (Keys.Shift Or Keys.Control)
+    '    Select Case key
+    '        Case Keys.F
+    '            If (keyData Or Keys.Control) <> 0 Then
+    '                MsgBox("Ctrl+F")
+    '            End If
+    '    End Select
+
+    '    Return True
+    'End Function
+
+    '<DllImport("user32.dll", EntryPoint:="RegisterHotKey", CharSet:=CharSet.Auto, SetLastError:=True)>
+    'Private Shared Function prRegisterHotHey(hwnd As IntPtr, id As Integer, fsModifiers As Integer, vk As Integer) As Integer
+    'End Function
+
+    '<DllImport("user32.dll", EntryPoint:="UnregisterHotKey", CharSet:=CharSet.Auto, SetLastError:=True)>
+    'Private Shared Function prUnregisterHotKey(hwnd As IntPtr, id As Integer) As Integer
+    'End Function
+
+    'Protected Overrides Sub OnShown(e As EventArgs)
+    '    MyBase.OnShown(e)
+    '    Dim x1 = prRegisterHotHey(Handle, 990, &H0, Keys.Up)
+    '    Dim x2 = prRegisterHotHey(Handle, 991, &H0, Keys.Down)
+    'End Sub
+    'Protected Overrides Sub OnFormClosed(e As FormClosedEventArgs)
+    '    MyBase.OnFormClosed(e)
+    '    prUnregisterHotKey(Handle, 990)
+    '    prUnregisterHotKey(Handle, 991)
+    'End Sub
+
+
+
+    'Protected Overrides Sub OnShown(e As EventArgs)
+    '    MyBase.OnShown(e)
+    '    '// 0x0 : 조합키 없이 사용, 0x1: ALT, 0x2: Ctrl, 0x3: Shift
+    '    HotkeyTool.Register(Handle, 990, 2 Or 4, Keys.W)
+    'End Sub
+    'Protected Overrides Sub OnFormClosed(e As FormClosedEventArgs)
+    '    MyBase.OnFormClosed(e)
+    '    HotkeyTool.Unregister(Handle, 990)
+    'End Sub
+    'Protected Overrides Sub WndProc(ByRef m As Message)
+    '    MyBase.WndProc(m)
+    '    If m.Msg = &H312 Then
+    '        If m.WParam = New IntPtr(990) Then
+    '            If ActiveForm Is Me Then
+    '                Debug.WriteLine($">>> {ActiveForm?.ToString()}")
+    '                MsgBox("Target#0")
+    '            End If
+    '        End If
+    '    End If
+    'End Sub
+#End Region
 End Class
+
+
+
+
 
 
 

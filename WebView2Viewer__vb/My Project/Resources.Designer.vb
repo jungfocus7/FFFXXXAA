@@ -59,5 +59,21 @@ Namespace My.Resources
                 resourceCulture = value
             End Set
         End Property
+        
+        '''<summary>
+        '''  //window.focus();
+        '''window.addEventListener(&apos;focus&apos;,
+        '''    (e) =&gt; {        
+        '''        try {
+        '''			console.log(&apos;처음에 왜 두번이나 호출이 되어버릴까?&apos;, e.type, e);
+        '''            chrome.webview.postMessage(`${e.type}|empty`);
+        '''        } catch { }
+        '''    });과(와) 유사한 지역화된 문자열을 찾습니다.
+        '''</summary>
+        Friend ReadOnly Property FromReady() As String
+            Get
+                Return ResourceManager.GetString("FromReady", resourceCulture)
+            End Get
+        End Property
     End Module
 End Namespace

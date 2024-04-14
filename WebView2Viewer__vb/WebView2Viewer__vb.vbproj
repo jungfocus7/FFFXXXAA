@@ -77,6 +77,9 @@
     <Reference Include="Microsoft.Web.WebView2.Wpf, Version=1.0.2420.47, Culture=neutral, PublicKeyToken=2a8ab48044d2601e, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.WebView2.1.0.2420.47\lib\net45\Microsoft.Web.WebView2.Wpf.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.dll</HintPath>
     </Reference>
@@ -112,6 +115,7 @@
       <DependentUpon>MainForm.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Models\HotkeyInfo.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -129,6 +133,7 @@
     </Compile>
     <Compile Include="Tools\DebugTool.vb" />
     <Compile Include="MainProxy.vb" />
+    <Compile Include="Tools\HotkeyTool.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controls\AlertForm.resx">
@@ -160,6 +165,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="%40%40AddHtmlResources\FromReady.js" />
     <Content Include="Root.ico" />
   </ItemGroup>
   <ItemGroup />

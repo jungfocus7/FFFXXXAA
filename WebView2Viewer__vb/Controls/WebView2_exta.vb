@@ -10,6 +10,7 @@ Imports Microsoft.Web.WebView2.WinForms
 Public NotInheritable Class WebView2_exta : Inherits WebView2
     Private Shared _wv2ex As WebView2_exta
     Private Shared _cwv2 As CoreWebView2
+    Private Shared _cbf As Action(Of String, String)
 
     Public Shared Sub ClearFrom(pnl As Panel)
         If _wv2ex Is Nothing Then
@@ -23,6 +24,8 @@ Public NotInheritable Class WebView2_exta : Inherits WebView2
             Catch
             End Try
             _wv2ex = Nothing
+            _cwv2 = Nothing
+            _cbf = Nothing
 
             For Each ctr As Control In pnl.Controls
                 Try
@@ -68,19 +71,34 @@ Public NotInheritable Class WebView2_exta : Inherits WebView2
     Private Shared Sub prCoreWebView2InitializationCompleted(sd As Object, ea As CoreWebView2InitializationCompletedEventArgs)
         If ea.IsSuccess Then
             _cwv2 = _wv2ex.CoreWebView2
+
             Dim cwvss As CoreWebView2Settings = _cwv2.Settings
             cwvss.IsPinchZoomEnabled = False
             cwvss.IsZoomControlEnabled = False
-            _cwv2.AddScriptToExecuteOnDocumentCreatedAsync("
-window.addEventListener('mousedown',
-    (e) => {
-        if (e.button === 0) {
-            console.log(e);   
-        }
-    });
-            ".Trim())
 
+            Dim addScript As String = My.Resources.FromReady
+            _cwv2.AddScriptToExecuteOnDocumentCreatedAsync(addScript)
+            AddHandler _cwv2.DOMContentLoaded,
+                Sub()
+                    Activated()
+                End Sub
+
+            AddHandler _cwv2.WebMessageReceived, AddressOf prWebMessageReceived
             AddHandler _cwv2.ContextMenuRequested, AddressOf prContextMenuRequested
+        End If
+    End Sub
+
+    Private Shared Sub prWebMessageReceived(sd As Object, ea As CoreWebView2WebMessageReceivedEventArgs)
+        Dim wmsg As String = ea.WebMessageAsJson
+        If Not String.IsNullOrWhiteSpace(wmsg) Then
+            Try
+                wmsg = wmsg.Trim().Trim(""""c)
+                Dim xxa As String() = wmsg.Split("|"c)
+                Dim tp As String = xxa(0)
+                Dim td As String = xxa(1)
+                _cbf?.Invoke(tp, td)
+            Catch
+            End Try
         End If
     End Sub
 
@@ -96,9 +114,10 @@ window.addEventListener('mousedown',
     End Sub
 
 
-    Public Shared Sub OpenFrom(pnl As Panel, uri As Uri)
+    Public Shared Sub OpenFrom(pnl As Panel, uri As Uri, Optional cbf As Action(Of String, String) = Nothing)
         prCreateFrom(pnl)
         _wv2ex.Source = uri
+        _cbf = cbf
     End Sub
 
     Public Shared Sub OpenDevToolsWindow()
@@ -113,8 +132,31 @@ window.addEventListener('mousedown',
         _cwv2?.Reload()
     End Sub
 
+    Public Shared Sub Activated()
+        MainProxy.MainForm.Activate()
+        MainProxy.MainForm.ActiveControl = _wv2ex
+    End Sub
+
+    'Public Shared Sub Deactivate()
+    'End Sub
+
 
     Private Sub New()
     End Sub
+
+
+
+
+
+
+    'Protected Overrides Sub OnGotFocus(e As EventArgs)
+    '    Debug.WriteLine("xxxxx-a")
+    '    MyBase.OnGotFocus(e)
+    'End Sub
+
+    'Protected Overrides Function ProcessCmdKey(ByRef msg As Message, keyData As Keys) As Boolean
+    '    Debug.WriteLine("xxxxx-b")
+    '    Return MyBase.ProcessCmdKey(msg, keyData)
+    'End Function
 
 End Class
