@@ -38,7 +38,7 @@ Public NotInheritable Class MainForm
         Text = MainProxy.GetTitleText()
         MinimumSize = Size - New Size(300, 300)
         AlignBottomRight()
-        ResizeRenderCancel()
+        AddResizeRenderCancel()
 
         _cdp = Environment.GetCommandLineArgs()(0)
         _cdp = Path.GetDirectoryName(_cdp)

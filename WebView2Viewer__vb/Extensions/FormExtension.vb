@@ -28,7 +28,7 @@ Namespace Extensions
         ''' </summary>
         ''' <param name="frm"></param>
         <Extension()>
-        Public Sub ResizeRenderCancel(frm As Form)
+        Public Sub AddResizeRenderCancel(frm As Form)
             AddHandler frm.ResizeBegin,
                 Sub(sd As Object, ea As EventArgs)
                     frm.SuspendLayout()
