@@ -44,6 +44,8 @@ Public NotInheritable Class MainForm
         _cdp = Path.GetDirectoryName(_cdp)
 
         prFooterSetting()
+
+        prOpenFileFromCmdArgs()
     End Sub
 
 
@@ -375,6 +377,17 @@ Public NotInheritable Class MainForm
         MyBase.OnDeactivate(e)
     End Sub
 
+
+
+    Private Sub prOpenFileFromCmdArgs()
+        Dim args As String() = Environment.GetCommandLineArgs()
+        If (Not args Is Nothing) AndAlso (args.Length = 2) Then
+            Try
+                prOpenUrl(args(1))
+            Catch
+            End Try
+        End If
+    End Sub
 
 
 
