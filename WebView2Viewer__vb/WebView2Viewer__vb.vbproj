@@ -103,9 +103,7 @@
     <Compile Include="Controls\AlertForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Controls\WebView2_exta.vb">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Controls\WebView2_exta.vb" />
     <Compile Include="Enums\OpenType.vb" />
     <Compile Include="Extensions\FormExtension.vb" />
     <Compile Include="MainForm.vb">

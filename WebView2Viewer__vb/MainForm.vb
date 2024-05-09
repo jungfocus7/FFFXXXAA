@@ -276,14 +276,16 @@ Public NotInheritable Class MainForm
 
 
     ''' <summary>
-    ''' ???
+    ''' WebView2 연동콜백 (chrome.webview.postMessage) 
     ''' </summary>
-    ''' <param name="tp"></param>
-    ''' <param name="td"></param>
-    Private Sub prWebView2BrowserCallback(tp As String, td As String)
+    ''' <param name="type"></param>
+    ''' <param name="dump"></param>
+    Private Sub prWebView2BrowserCallback(type As String, dump As String)
         'prErrorDisplay($"{tp}, {td}")
-        If tp = "focus" Then
+        If type = "focus" Then
             _cms?.Close()
+        ElseIf type = "click" Then
+            AlertForm.Open(Me, dump)
         End If
     End Sub
 
