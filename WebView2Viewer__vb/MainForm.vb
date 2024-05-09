@@ -282,10 +282,10 @@ Public NotInheritable Class MainForm
     ''' <param name="dump"></param>
     Private Sub prWebView2BrowserCallback(type As String, dump As String)
         'prErrorDisplay($"{tp}, {td}")
-        If type = "focus" Then
+        If type = WebView2_exta.CbtFocus Then
             _cms?.Close()
-        ElseIf type = "click" Then
-            AlertForm.Open(Me, dump)
+        ElseIf type = WebView2_exta.CbtClick Then
+            'AlertForm.Open(Me, dump)
         End If
     End Sub
 

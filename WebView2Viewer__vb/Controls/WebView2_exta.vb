@@ -14,6 +14,7 @@ Namespace Controls
         Public Dump As String
     End Class
 
+
     Public NotInheritable Class WebView2_exta : Inherits WebView2
         Private Shared _wv2ex As WebView2_exta
         Private Shared _cwv2 As CoreWebView2
@@ -95,6 +96,8 @@ Namespace Controls
             End If
         End Sub
 
+        Public Shared CbtFocus As String = "focus"
+        Public Shared CbtClick As String = "click"
         Private Shared Sub prWebMessageReceived(sd As Object, ea As CoreWebView2WebMessageReceivedEventArgs)
             Dim wmsg As String = ea.WebMessageAsJson
             If Not String.IsNullOrWhiteSpace(wmsg) Then
@@ -104,18 +107,6 @@ Namespace Controls
                 Catch
                 End Try
             End If
-
-            'Dim wmsg As String = ea.WebMessageAsJson
-            'If Not String.IsNullOrWhiteSpace(wmsg) Then
-            '    Try
-            '        wmsg = wmsg.Trim().Trim(""""c)
-            '        Dim xxa As String() = wmsg.Split("|"c)
-            '        Dim tp As String = xxa(0)
-            '        Dim td As String = xxa(1)
-            '        _cbf?.Invoke(tp, td)
-            '    Catch
-            '    End Try
-            'End If
         End Sub
 
         Private Shared Sub prContextMenuRequested(sd As Object, ea As CoreWebView2ContextMenuRequestedEventArgs)
@@ -174,6 +165,5 @@ Namespace Controls
         '    Debug.WriteLine("xxxxx-b")
         '    Return MyBase.ProcessCmdKey(msg, keyData)
         'End Function
-
     End Class
 End Namespace
