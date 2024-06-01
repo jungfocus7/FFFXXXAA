@@ -40,7 +40,7 @@ Partial Class MainForm
         Me._btnFunction.Name = "_btnFunction"
         Me._btnFunction.Size = New System.Drawing.Size(80, 40)
         Me._btnFunction.TabIndex = 1
-        Me._btnFunction.Text = "Go"
+        Me._btnFunction.Text = "GO"
         Me._btnFunction.UseVisualStyleBackColor = False
         '
         '_txbInput

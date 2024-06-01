@@ -37,6 +37,9 @@ Namespace Extensions
             AddHandler frm.ResizeEnd,
                 Sub(sd As Object, ea As EventArgs)
                     frm.ResumeLayout(True)
+
+                    GC.Collect()
+                    GC.WaitForPendingFinalizers()
                 End Sub
         End Sub
     End Module
