@@ -51,5 +51,15 @@ Public NotInheritable Class MainProxy
         End Get
     End Property
 
+
+
+    ''' <summary>
+    ''' GC 콜
+    ''' </summary>
+    Public Shared Sub GCCall()
+        GC.Collect()
+        GC.WaitForPendingFinalizers()
+    End Sub
+
 End Class
 

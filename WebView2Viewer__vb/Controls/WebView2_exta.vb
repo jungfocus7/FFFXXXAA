@@ -47,8 +47,7 @@ Namespace Controls
                 pnl.ResumeLayout(False)
                 pnl.PerformLayout()
 
-                GC.WaitForPendingFinalizers()
-                GC.Collect()
+                MainProxy.GCCall()
             End If
         End Sub
 

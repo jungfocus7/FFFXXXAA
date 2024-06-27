@@ -318,10 +318,8 @@ Public NotInheritable Class MainForm
                         AlertForm.Open(Me, "저장 에러")
                     End Try
 
-                    GC.Collect()
-                    GC.WaitForPendingFinalizers()
+                    MainProxy.GCCall()
                 End If
-
         End Select
 
 

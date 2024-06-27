@@ -38,8 +38,7 @@ Namespace Extensions
                 Sub(sd As Object, ea As EventArgs)
                     frm.ResumeLayout(True)
 
-                    GC.Collect()
-                    GC.WaitForPendingFinalizers()
+                    MainProxy.GCCall()
                 End Sub
         End Sub
     End Module
