@@ -5,6 +5,7 @@ Imports System.Windows.Forms
 Imports Microsoft.Web.WebView2.Core
 Imports Microsoft.Web.WebView2.WinForms
 Imports Newtonsoft.Json
+Imports WebView2Viewer__vb.Tools
 
 
 
@@ -98,6 +99,7 @@ Namespace Controls
 
         Public Shared CbtFocus As String = "focus"
         Public Shared CbtClick As String = "click"
+        Public Shared CbtGetHtmlText As String = "getHtmlText"
         Private Shared Sub prWebMessageReceived(sd As Object, ea As CoreWebView2WebMessageReceivedEventArgs)
             Dim wmsg As String = ea.WebMessageAsJson
             If Not String.IsNullOrWhiteSpace(wmsg) Then
@@ -146,6 +148,14 @@ Namespace Controls
 
         'Public Shared Sub Deactivate()
         'End Sub
+
+        Public Shared Async Sub GetHtmlText()
+            'Dim tx = _cwv2.Source
+            Dim txt As String = Await _wv2ex.ExecuteScriptAsync("fn_getHtmlText();")
+            If Not txt Is Nothing Then
+                DebugTool.Alert(txt)
+            End If
+        End Sub
 
 
         Private Sub New()

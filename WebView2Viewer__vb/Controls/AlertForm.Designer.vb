@@ -30,7 +30,7 @@
             '
             '_txbMain
             '
-            Me._txbMain.Font = New System.Drawing.Font("맑은 고딕", 11.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+            Me._txbMain.Font = New System.Drawing.Font("맑은 고딕", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
             Me._txbMain.Location = New System.Drawing.Point(12, 12)
             Me._txbMain.Multiline = True
             Me._txbMain.Name = "_txbMain"

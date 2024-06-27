@@ -16,7 +16,7 @@ Namespace Tools
 #If DEBUG Then
                 Return True
 #Else
-            Return False
+                Return False
 #End If
             End Get
         End Property

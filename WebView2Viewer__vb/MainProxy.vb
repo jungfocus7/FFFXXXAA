@@ -1,4 +1,6 @@
-﻿Imports System.Windows.Forms
+﻿Imports System
+Imports System.IO
+Imports System.Windows.Forms
 
 
 
@@ -8,12 +10,25 @@ Public NotInheritable Class MainProxy
 
 
     ''' <summary>
+    ''' 처음 초기화
+    ''' </summary>
+    Shared Sub New()
+        CommandLineArgs = Environment.GetCommandLineArgs()
+        AppDirPath = Path.GetDirectoryName(CommandLineArgs(0))
+    End Sub
+
+    Public Shared ReadOnly Property CommandLineArgs As String()
+    Public Shared ReadOnly Property AppDirPath As String
+
+
+
+    ''' <summary>
     ''' 타이틀 문자열 가져오기
     ''' </summary>
     ''' <returns></returns>
     Public Shared Function GetTitleText(Optional ics As String = Nothing) As String
         Dim dvi As String = "WebView2Viewer__vb"
-        Dim vnb As String = "v1.5.7"
+        Dim vnb As String = "v1.5.8"
         If Not String.IsNullOrWhiteSpace(ics) Then
             Return $"[ {dvi},  {vnb} ]   ""{ics}"""
         Else
@@ -35,5 +50,6 @@ Public NotInheritable Class MainProxy
             Return _mainForm
         End Get
     End Property
+
 End Class
 

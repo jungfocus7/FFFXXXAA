@@ -108,6 +108,8 @@ Public NotInheritable Class MainForm
             New ToolStripMenuItem("5) 새로 고침", Nothing, AddressOf prCmsAllClick),
             New ToolStripSeparator(),
             New ToolStripMenuItem("S) 이미지 캡처", Nothing, AddressOf prCmsAllClick),
+            New ToolStripMenuItem("A) HTML 저장", Nothing, AddressOf prCmsAllClick),
+            New ToolStripSeparator(),
             New ToolStripMenuItem("X) 메뉴 닫기", Nothing, AddressOf prCmsAllClick)
         }
         _cms.Cursor = Cursors.Hand
@@ -196,6 +198,12 @@ Public NotInheritable Class MainForm
                 AlertForm.Open(Me, "준비중")
             Catch
             End Try
+        ElseIf tsi.Text.StartsWith("A) ") Then
+            Try
+                'AlertForm.Open(Me, "준비중")
+                WebView2_exta.GetHtmlText()
+            Catch
+            End Try
         ElseIf tsi.Text.StartsWith("X) ") Then
             Try
                 _cms.Close()
@@ -281,12 +289,42 @@ Public NotInheritable Class MainForm
     ''' <param name="type"></param>
     ''' <param name="dump"></param>
     Private Sub prWebView2BrowserCallback(type As String, dump As String)
-        'prErrorDisplay($"{tp}, {td}")
-        If type = WebView2_exta.CbtFocus Then
-            _cms?.Close()
-        ElseIf type = WebView2_exta.CbtClick Then
-            'AlertForm.Open(Me, dump)
-        End If
+        'prErrorDisplay($"{type}, {dump}")
+
+        'If type = WebView2_exta.CbtFocus Then
+        '    _cms?.Close()
+        'ElseIf type = WebView2_exta.CbtClick Then
+        '    'AlertForm.Open(Me, dump)
+        'ElseIf type = WebView2_exta.CbtGetHtmlText Then
+        '    Dim htmlText As String = dump
+        '    AlertForm.Open(Me, htmlText)
+        'End If
+
+        Select Case type
+            Case WebView2_exta.CbtFocus
+                _cms?.Close()
+
+            Case WebView2_exta.CbtClick
+                'AlertForm.Open(Me, dump)
+
+            Case WebView2_exta.CbtGetHtmlText
+                Dim htmlText As String = dump
+                If Not String.IsNullOrWhiteSpace(htmlText) Then
+                    'AlertForm.Open(Me, htmlText)
+                    Try
+                        DataTool.SaveHtmlText(htmlText)
+                        AlertForm.Open(Me, "저장 성공")
+                    Catch
+                        AlertForm.Open(Me, "저장 에러")
+                    End Try
+
+                    GC.Collect()
+                    GC.WaitForPendingFinalizers()
+                End If
+
+        End Select
+
+
     End Sub
 
 
