@@ -50,11 +50,11 @@ Partial Class MainForm
         Me._txbInput.BackColor = System.Drawing.SystemColors.Window
         Me._txbInput.Enabled = False
         Me._txbInput.ForeColor = System.Drawing.SystemColors.ScrollBar
-        Me._txbInput.Location = New System.Drawing.Point(15, 561)
+        Me._txbInput.Location = New System.Drawing.Point(13, 561)
         Me._txbInput.Margin = New System.Windows.Forms.Padding(0)
         Me._txbInput.Name = "_txbInput"
         Me._txbInput.ReadOnly = True
-        Me._txbInput.Size = New System.Drawing.Size(690, 23)
+        Me._txbInput.Size = New System.Drawing.Size(686, 23)
         Me._txbInput.TabIndex = 2
         '
         '_panelRoot

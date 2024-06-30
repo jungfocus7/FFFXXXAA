@@ -427,17 +427,27 @@ Public NotInheritable Class MainForm
         End If
     End Sub
 
+#End Region
+
+
+    Private Const WM_NCHITTEST As Integer = 132
+    Private Const HTCLIENT As Integer = 1
+    Private Const HTCAPTION As Integer = 2
+    Protected Overrides Sub WndProc(ByRef m As Message)
+        MyBase.WndProc(m)
+
+        Select Case m.Msg
+            Case WM_NCHITTEST
+                If m.Result.ToInt32() = HTCLIENT Then
+                    m.Result = New IntPtr(HTCAPTION)
+                End If
+        End Select
+    End Sub
 
 
 
     Private Sub prAfterInit()
     End Sub
-#End Region
-
-
-
-
-
 
 
 
