@@ -23,51 +23,51 @@ Partial Class MainForm
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MainForm))
-        Me._btnFunction = New System.Windows.Forms.Button()
-        Me._txbInput = New System.Windows.Forms.TextBox()
-        Me._panelRoot = New System.Windows.Forms.Panel()
+        Me.m_btnFunction = New Controls.ButtnEx71()
+        Me.m_txbInput = New System.Windows.Forms.TextBox()
+        Me.m_panelRoot = New System.Windows.Forms.Panel()
         Me.SuspendLayout()
         '
-        '_btnFunction
+        'm_btnFunction
         '
-        Me._btnFunction.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me._btnFunction.BackColor = System.Drawing.Color.DarkMagenta
-        Me._btnFunction.Cursor = System.Windows.Forms.Cursors.Hand
-        Me._btnFunction.Font = New System.Drawing.Font("맑은 고딕", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
-        Me._btnFunction.ForeColor = System.Drawing.SystemColors.Control
-        Me._btnFunction.Location = New System.Drawing.Point(711, 551)
-        Me._btnFunction.Margin = New System.Windows.Forms.Padding(0)
-        Me._btnFunction.Name = "_btnFunction"
-        Me._btnFunction.Size = New System.Drawing.Size(80, 40)
-        Me._btnFunction.TabIndex = 1
-        Me._btnFunction.Text = "GO"
-        Me._btnFunction.UseVisualStyleBackColor = False
+        Me.m_btnFunction.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.m_btnFunction.BackColor = System.Drawing.Color.DarkMagenta
+        Me.m_btnFunction.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.m_btnFunction.Font = New System.Drawing.Font("맑은 고딕", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
+        Me.m_btnFunction.ForeColor = System.Drawing.SystemColors.Control
+        Me.m_btnFunction.Location = New System.Drawing.Point(676, 551)
+        Me.m_btnFunction.Margin = New System.Windows.Forms.Padding(0)
+        Me.m_btnFunction.Name = "m_btnFunction"
+        Me.m_btnFunction.Size = New System.Drawing.Size(120, 40)
+        Me.m_btnFunction.TabIndex = 1
+        Me.m_btnFunction.Text = "GO"
+        Me.m_btnFunction.UseVisualStyleBackColor = False
         '
-        '_txbInput
+        'm_txbInput
         '
-        Me._txbInput.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.m_txbInput.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me._txbInput.BackColor = System.Drawing.SystemColors.Window
-        Me._txbInput.Enabled = False
-        Me._txbInput.ForeColor = System.Drawing.SystemColors.ScrollBar
-        Me._txbInput.Location = New System.Drawing.Point(13, 561)
-        Me._txbInput.Margin = New System.Windows.Forms.Padding(0)
-        Me._txbInput.Name = "_txbInput"
-        Me._txbInput.ReadOnly = True
-        Me._txbInput.Size = New System.Drawing.Size(686, 23)
-        Me._txbInput.TabIndex = 2
+        Me.m_txbInput.BackColor = System.Drawing.SystemColors.Window
+        Me.m_txbInput.Enabled = False
+        Me.m_txbInput.ForeColor = System.Drawing.SystemColors.ScrollBar
+        Me.m_txbInput.Location = New System.Drawing.Point(4, 561)
+        Me.m_txbInput.Margin = New System.Windows.Forms.Padding(0)
+        Me.m_txbInput.Name = "m_txbInput"
+        Me.m_txbInput.ReadOnly = True
+        Me.m_txbInput.Size = New System.Drawing.Size(668, 23)
+        Me.m_txbInput.TabIndex = 2
         '
-        '_panelRoot
+        'm_panelRoot
         '
-        Me._panelRoot.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.m_panelRoot.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me._panelRoot.BackColor = System.Drawing.Color.LightGray
-        Me._panelRoot.Location = New System.Drawing.Point(9, 9)
-        Me._panelRoot.Margin = New System.Windows.Forms.Padding(0)
-        Me._panelRoot.Name = "_panelRoot"
-        Me._panelRoot.Size = New System.Drawing.Size(782, 534)
-        Me._panelRoot.TabIndex = 4
+        Me.m_panelRoot.BackColor = System.Drawing.Color.LightGray
+        Me.m_panelRoot.Location = New System.Drawing.Point(0, 0)
+        Me.m_panelRoot.Margin = New System.Windows.Forms.Padding(0)
+        Me.m_panelRoot.Name = "m_panelRoot"
+        Me.m_panelRoot.Size = New System.Drawing.Size(800, 546)
+        Me.m_panelRoot.TabIndex = 4
         '
         'MainForm
         '
@@ -76,9 +76,9 @@ Partial Class MainForm
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.Black
         Me.ClientSize = New System.Drawing.Size(800, 600)
-        Me.Controls.Add(Me._panelRoot)
-        Me.Controls.Add(Me._txbInput)
-        Me.Controls.Add(Me._btnFunction)
+        Me.Controls.Add(Me.m_panelRoot)
+        Me.Controls.Add(Me.m_txbInput)
+        Me.Controls.Add(Me.m_btnFunction)
         Me.Font = New System.Drawing.Font("맑은 고딕", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(129, Byte))
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Location = New System.Drawing.Point(100, 40)
@@ -91,7 +91,7 @@ Partial Class MainForm
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents _btnFunction As System.Windows.Forms.Button
-    Friend WithEvents _txbInput As System.Windows.Forms.TextBox
-    Friend WithEvents _panelRoot As System.Windows.Forms.Panel
+    Friend WithEvents m_btnFunction As Controls.ButtnEx71
+    Friend WithEvents m_txbInput As System.Windows.Forms.TextBox
+    Friend WithEvents m_panelRoot As System.Windows.Forms.Panel
 End Class

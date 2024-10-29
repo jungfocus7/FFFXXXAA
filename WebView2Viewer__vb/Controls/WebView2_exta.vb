@@ -5,7 +5,7 @@ Imports System.Windows.Forms
 Imports Microsoft.Web.WebView2.Core
 Imports Microsoft.Web.WebView2.WinForms
 Imports Newtonsoft.Json
-Imports WebView2Viewer__vb.Tools
+Imports WebView2Viewer__vb.Helpers
 
 
 
@@ -152,7 +152,7 @@ Namespace Controls
             'Dim tx = _cwv2.Source
             Dim txt As String = Await _wv2ex.ExecuteScriptAsync("fn_getHtmlText();")
             If Not txt Is Nothing Then
-                DebugTool.Alert(txt)
+                DebugHelper.Alert(txt)
             End If
         End Sub
 

@@ -1,8 +1,9 @@
 ﻿Imports System.Diagnostics
 Imports System.Windows.Forms
 
-Namespace Tools
-    Public NotInheritable Class DebugTool
+
+Namespace Helpers
+    Public NotInheritable Class DebugHelper
         Private Sub New()
         End Sub
 
@@ -18,22 +19,6 @@ Namespace Tools
 #Else
                 Return False
 #End If
-            End Get
-        End Property
-
-
-        Private Shared _frmMain As Form
-        ''' <summary>
-        ''' 메인 폼
-        ''' </summary>
-        ''' <returns></returns>
-        Public Shared ReadOnly Property MainForm As Form
-            Get
-                If _frmMain Is Nothing Then
-                    _frmMain = Application.OpenForms("MainForm")
-                End If
-
-                Return _frmMain
             End Get
         End Property
 

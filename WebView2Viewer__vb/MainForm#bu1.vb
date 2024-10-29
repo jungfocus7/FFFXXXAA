@@ -10,7 +10,7 @@ Imports System.Windows.Forms
 Imports WebView2Viewer__vb.Controls
 Imports WebView2Viewer__vb.Extensions
 Imports WebView2Viewer__vb.Models
-Imports WebView2Viewer__vb.Helpers
+Imports WebView2Viewer__vb.Tools
 
 
 
@@ -176,7 +176,7 @@ Public NotInheritable Class MainForm
                 Else
                 End If
             Catch
-                DebugHelper.Log("실패")
+                DebugTool.Log("실패")
             End Try
         ElseIf tsi.Text.StartsWith("3) ") Then
             Try
@@ -291,6 +291,15 @@ Public NotInheritable Class MainForm
     Private Sub prWebView2BrowserCallback(type As String, dump As String)
         'prErrorDisplay($"{type}, {dump}")
 
+        'If type = WebView2_exta.CbtFocus Then
+        '    _cms?.Close()
+        'ElseIf type = WebView2_exta.CbtClick Then
+        '    'AlertForm.Open(Me, dump)
+        'ElseIf type = WebView2_exta.CbtGetHtmlText Then
+        '    Dim htmlText As String = dump
+        '    AlertForm.Open(Me, htmlText)
+        'End If
+
         Select Case type
             Case WebView2_exta.CbtFocus
                 _cms?.Close()
@@ -303,7 +312,7 @@ Public NotInheritable Class MainForm
                 If Not String.IsNullOrWhiteSpace(htmlText) Then
                     'AlertForm.Open(Me, htmlText)
                     Try
-                        DataHelper.SaveHtmlText(htmlText)
+                        DataTool.SaveHtmlText(htmlText)
                         AlertForm.Open(Me, "저장 성공")
                     Catch
                         AlertForm.Open(Me, "저장 에러")
@@ -418,34 +427,30 @@ Public NotInheritable Class MainForm
         End If
     End Sub
 
-
-    Protected Overrides Sub WndProc(ByRef m As Message)
-        If HotkeyHelper.CheckWndProc(Me, m) Then
-            Return
-        End If
-
-        MyBase.WndProc(m)
-    End Sub
-
-    Private Sub prAfterInit()
-        HotkeyHelper.AddHotkey(New HotkeyInfo() With {
-            .hwnd = Handle,
-            .fsModifiers = HotkeyHelper.Kmf_None,
-            .vk = Keys.Apps,
-            .cbf = Sub()
-                       Dim ea As New MouseEventArgs(MouseButtons.Right, 0, 0, 0, 0)
-                       prBtnFunctionMouseDown(Me, ea)
-                   End Sub
-        })
-
-        AddHandler FormClosing,
-            Sub(sd As Object, ea As FormClosingEventArgs)
-                HotkeyHelper.ClearAllHotkey()
-            End Sub
-    End Sub
 #End Region
 
 
+
+
+    Private Const WM_NCHITTEST As Integer = 132
+    Private Const HTCLIENT As Integer = 1
+    Private Const HTCAPTION As Integer = 2
+    Protected Overrides Sub WndProc(ByRef m As Message)
+        MyBase.WndProc(m)
+
+        Select Case m.Msg
+            Case WM_NCHITTEST
+                If m.Result.ToInt32() = HTCLIENT Then
+                    m.Result = New IntPtr(HTCAPTION)
+                End If
+        End Select
+    End Sub
+
+
+
+    Private Sub prAfterInit()
+        KeyPreview = True
+    End Sub
 
 
 
@@ -453,46 +458,105 @@ Public NotInheritable Class MainForm
 
 
 #Region "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 3) 단축키 코드"
-    'Private Const _dllfpUser32 = "user32.dll"
+    ''### 레지스트 핫키를 사용하면 다른프로그램에서 키가 십힌다 문제해결은 나중에...
+    'Private Sub prAfterInit()
+    '    'prHotkeyInits()
 
-    '<DllImport(_dllfpUser32, EntryPoint:="RegisterHotKey", CharSet:=CharSet.Auto, SetLastError:=True)>
-    'Private Shared Function prRegisterHotHey(
-    '    hwnd As IntPtr, id As Integer, fsModifiers As Integer, vk As Integer) As Integer
-    'End Function
+    '    'AddHandler FormClosing,
+    '    '    Sub(sd As Object, ea As FormClosingEventArgs)
+    '    '        prHotkeyClear()
+    '    '    End Sub
+    'End Sub
 
-    '<DllImport(_dllfpUser32, EntryPoint:="UnregisterHotKey", CharSet:=CharSet.Auto, SetLastError:=True)>
-    'Private Shared Function prUnregisterHotKey(
-    '    hwnd As IntPtr, id As Integer) As Integer
-    'End Function
+    'Private Sub prHotkeyInits()
+    '    'prAddHotkey(New HotkeyInfo() With {
+    '    '    .hwnd = Handle,
+    '    '    .fsModifiers = KeyModifiers.Control Or KeyModifiers.Shift,
+    '    '    .vk = Keys.Q,
+    '    '    .cbf = Sub()
+    '    '               Close()
+    '    '           End Sub
+    '    '})
 
+    '    prAddHotkey(New HotkeyInfo() With {
+    '        .hwnd = Handle,
+    '        .fsModifiers = KeyModifiers.None,
+    '        .vk = Keys.Escape,
+    '        .cbf = Sub()
+    '                   Try
+    '                       _cms.Close()
+    '                   Catch
+    '                   End Try
+    '               End Sub
+    '    })
 
-    'Private Const _HOTKEY_ID As Integer = 31197 + 30000
+    '    prAddHotkey(New HotkeyInfo() With {
+    '        .hwnd = Handle,
+    '        .fsModifiers = KeyModifiers.Control Or KeyModifiers.Shift,
+    '        .vk = Keys.O,
+    '        .cbf = Sub()
+    '                   Try
+    '                       If (_ofd.ShowDialog(Me) = DialogResult.OK) Then
+    '                           prOpenFile(_ofd.FileName)
+    '                       End If
+    '                   Catch
+    '                   End Try
+    '               End Sub
+    '    })
 
-    'Private Enum _KeyModifiers
-    '    None = 0
-    '    Alt = 1
-    '    Control = 2
-    '    Shift = 4
-    '    Windows = 8
-    'End Enum
+    '    prAddHotkey(New HotkeyInfo() With {
+    '        .hwnd = Handle,
+    '        .fsModifiers = KeyModifiers.Control Or KeyModifiers.Shift,
+    '        .vk = Keys.C,
+    '        .cbf = Sub()
+    '                   Try
+    '                       WebView2_exta.ClearFrom(_panelRoot)
+
+    '                       _ips = Nothing
+    '                       _hdp = Nothing
+
+    '                       Text = MainProxy.GetVerInfo()
+    '                       _txbInput.Clear()
+    '                   Catch
+    '                   End Try
+    '               End Sub
+    '    })
+    'End Sub
 
     'Private _hkidcnt As Integer = _HOTKEY_ID
     'Private _hotkeyInfos As New List(Of HotkeyInfo)
-
     'Private Sub prAddHotkey(hki As HotkeyInfo)
     '    hki.id = _hkidcnt
     '    _hkidcnt += 1
     '    _hotkeyInfos.Add(hki)
     '    prRegisterHotHey(hki.hwnd, hki.id, hki.fsModifiers, hki.vk)
+    '    'prUnregisterHotKey(hki.hwnd, hki.id)
     'End Sub
 
-    'Private Sub prHotkeyAllClear()
+    'Private Sub prHotkeyClear()
     '    For Each hki As HotkeyInfo In _hotkeyInfos
     '        prUnregisterHotKey(hki.hwnd, hki.id)
     '    Next
     '    _hotkeyInfos.Clear()
     'End Sub
 
+    '<DllImport("user32.dll", EntryPoint:="RegisterHotKey", CharSet:=CharSet.Auto, SetLastError:=True)>
+    'Private Shared Function prRegisterHotHey(hwnd As IntPtr, id As Integer, fsModifiers As Integer, vk As Integer) As Integer
+    'End Function
+
+    '<DllImport("user32.dll", EntryPoint:="UnregisterHotKey", CharSet:=CharSet.Auto, SetLastError:=True)>
+    'Private Shared Function prUnregisterHotKey(hwnd As IntPtr, id As Integer) As Integer
+    'End Function
+
+    'Private Const _HOTKEY_ID As Integer = 31197 + 30000
+
+    'Private Enum KeyModifiers
+    '    None = 0
+    '    Alt = 1
+    '    Control = 2
+    '    Shift = 4
+    '    Windows = 8
+    'End Enum
 
     'Private Const _WM_HOTKEY As Integer = &H312
     'Protected Overrides Sub WndProc(ByRef m As Message)
@@ -513,57 +577,17 @@ Public NotInheritable Class MainForm
     'End Sub
 
 
+    Protected Overrides Sub OnKeyPress(e As KeyPressEventArgs)
+        MyBase.OnKeyPress(e)
+    End Sub
 
-    ''### 레지스트 핫키를 사용하면 다른프로그램에서 키가 십힌다 문제해결은 나중에...
-    'Private Sub prAfterInit()
-    '    prAddHotkey(New HotkeyInfo() With {
-    '        .hwnd = Handle,
-    '        .fsModifiers = _KeyModifiers.None,
-    '        .vk = Keys.Apps,
-    '        .cbf = Sub()
-    '                   'MessageBox.Show("ㅋㅋㅋ 개발자")
-    '                   Dim btnRct As Rectangle = RectangleToScreen(m_btnFunction.Bounds)
-    '                   Dim cmsRct As Rectangle = RectangleToScreen(_cms.Bounds)
-    '                   Dim pt As New Point(btnRct.Right - (cmsRct.Width + 4), btnRct.Top - (cmsRct.Height + 4))
-    '                   _cms.Show(pt, ToolStripDropDownDirection.Default)
-    '                   ActiveControl = m_btnFunction
-    '               End Sub
-    '    })
-
-    '    AddHandler FormClosing,
-    '        Sub(sd As Object, ea As FormClosingEventArgs)
-    '            prHotkeyAllClear()
-    '        End Sub
-
-    '    KeyPreview = True
-    'End Sub
+    Protected Overrides Function ProcessCmdKey(ByRef msg As Message, keyData As Keys) As Boolean
+        Return MyBase.ProcessCmdKey(msg, keyData)
+    End Function
 #End Region
 
 
-
-
-
-
-
-
-
-
-
 #Region "######################################################### 코드 백업"
-    'Private Const WM_NCHITTEST As Integer = 132
-    'Private Const HTCLIENT As Integer = 1
-    'Private Const HTCAPTION As Integer = 2
-    'Protected Overrides Sub WndProc(ByRef m As Message)
-    '    MyBase.WndProc(m)
-
-    '    Select Case m.Msg
-    '        Case WM_NCHITTEST
-    '            If m.Result.ToInt32() = HTCLIENT Then
-    '                m.Result = New IntPtr(HTCAPTION)
-    '            End If
-    '    End Select
-    'End Sub
-
 
     'Protected Overrides Function ProcessCmdKey(ByRef msg As Message, keyData As Keys) As Boolean
     '    prErrorDisplay("ㅋㅋㅋㅋ >>> " & keyData)
