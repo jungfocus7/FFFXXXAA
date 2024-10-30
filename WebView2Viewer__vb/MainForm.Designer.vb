@@ -23,7 +23,7 @@ Partial Class MainForm
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MainForm))
-        Me.m_btnFunction = New Controls.ButtnEx71()
+        Me.m_btnFunction = New CustomControls.ButtnEx71()
         Me.m_txbInput = New System.Windows.Forms.TextBox()
         Me.m_panelRoot = New System.Windows.Forms.Panel()
         Me.SuspendLayout()
@@ -91,7 +91,7 @@ Partial Class MainForm
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents m_btnFunction As Controls.ButtnEx71
+    Friend WithEvents m_btnFunction As CustomControls.ButtnEx71
     Friend WithEvents m_txbInput As System.Windows.Forms.TextBox
     Friend WithEvents m_panelRoot As System.Windows.Forms.Panel
 End Class

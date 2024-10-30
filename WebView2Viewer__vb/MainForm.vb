@@ -1,17 +1,15 @@
 ﻿Imports System
-Imports System.Collections.Generic
 Imports System.Collections.Specialized
 Imports System.Diagnostics
 Imports System.Drawing
 Imports System.IO
 Imports System.Linq
-Imports System.Runtime.InteropServices
 Imports System.Windows.Forms
-Imports WebView2Viewer__vb.Controls
+Imports WebView2Viewer__vb.CustomControls
 Imports WebView2Viewer__vb.Extensions
-Imports WebView2Viewer__vb.Models
 Imports WebView2Viewer__vb.Helpers
-
+Imports WebView2Viewer__vb.Models
+Imports WebView2Viewer__vb.PopupForms
 
 
 Public NotInheritable Class MainForm
@@ -38,7 +36,7 @@ Public NotInheritable Class MainForm
         Text = MainProxy.GetTitleText()
         MinimumSize = Size - New Size(300, 300)
         AlignBottomRight()
-        'AddResizeRenderCancel()
+        AddResizeRenderCancel()
 
         _cdp = Environment.GetCommandLineArgs()(0)
         _cdp = Path.GetDirectoryName(_cdp)

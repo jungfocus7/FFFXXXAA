@@ -9,7 +9,7 @@ Imports WebView2Viewer__vb.Helpers
 
 
 
-Namespace Controls
+Namespace CustomControls
     Public NotInheritable Class DummyData
         Public Type As String
         Public Dump As String
@@ -79,6 +79,10 @@ Namespace Controls
         Private Shared Sub prCoreWebView2InitializationCompleted(sd As Object, ea As CoreWebView2InitializationCompletedEventArgs)
             If ea.IsSuccess Then
                 _cwv2 = _wv2ex.CoreWebView2
+
+                'Dim cwvpf As CoreWebView2Profile = _cwv2.Profile
+                'cwvpf.PreferredColorScheme = CoreWebView2PreferredColorScheme.Dark
+                'cwvpf.
 
                 Dim cwvss As CoreWebView2Settings = _cwv2.Settings
                 cwvss.IsPinchZoomEnabled = False

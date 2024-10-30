@@ -3,7 +3,7 @@ Imports System.Windows.Forms
 
 
 
-Namespace Controls
+Namespace PopupForms
     Public NotInheritable Class AlertForm
         Public Shared Function Open(owner As IWin32Window, title As String, text As String) As DialogResult
             Dim rdr As DialogResult = DialogResult.None

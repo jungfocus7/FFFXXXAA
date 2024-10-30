@@ -4,7 +4,6 @@ Imports System.Runtime.CompilerServices
 Imports System.Windows.Forms
 
 
-
 Namespace Extensions
     Public Module FormExtension
         ''' <summary>
@@ -24,7 +23,7 @@ Namespace Extensions
 
 
         ''' <summary>
-        ''' ??
+        ''' 리사이드 렌더를 취소한다.
         ''' </summary>
         ''' <param name="frm"></param>
         <Extension()>

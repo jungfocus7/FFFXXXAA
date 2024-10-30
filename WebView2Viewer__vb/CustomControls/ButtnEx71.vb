@@ -2,7 +2,7 @@
 Imports System.Windows.Forms
 
 
-Namespace Controls
+Namespace CustomControls
     Public NotInheritable Class ButtnEx71 : Inherits Button
         Private Sub prMouseDownEffect(bDown As Boolean)
             If bDown Then

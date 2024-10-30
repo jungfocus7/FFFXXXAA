@@ -1,4 +1,4 @@
-﻿Namespace Controls
+﻿Namespace PopupForms
     <Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
     Partial Class AlertForm
         Inherits System.Windows.Forms.Form
