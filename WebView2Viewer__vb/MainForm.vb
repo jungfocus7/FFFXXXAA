@@ -430,10 +430,11 @@ Public NotInheritable Class MainForm
             .hwnd = Handle,
             .fsModifiers = HotkeyHelper.Kmf_None,
             .vk = Keys.Apps,
-            .cbf = Sub()
-                       Dim ea As New MouseEventArgs(MouseButtons.Right, 0, 0, 0, 0)
-                       prBtnFunctionMouseDown(Me, ea)
-                   End Sub
+            .cbf =
+                Sub()
+                    Dim ea As New MouseEventArgs(MouseButtons.Right, 0, 0, 0, 0)
+                    prBtnFunctionMouseDown(Me, ea)
+                End Sub
         })
 
         AddHandler FormClosing,

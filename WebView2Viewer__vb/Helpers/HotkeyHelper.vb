@@ -61,7 +61,7 @@ Namespace Helpers
                     Dim wp As Integer = m.WParam.ToInt32()
 
                     For Each hki As HotkeyInfo In _hotkeyInfos
-                        If wp = hki.id Then
+                        If hki.id = wp Then
                             hki.cbf()
                             br = True
 
