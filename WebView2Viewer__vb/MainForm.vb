@@ -393,19 +393,9 @@ Public NotInheritable Class MainForm
     End Sub
 
 
-    Protected Overrides Sub OnActivated(e As EventArgs)
-        MyBase.OnActivated(e)
-
-        'WebView2_exta.Activated()
-    End Sub
-
-
-    Protected Overrides Sub OnDeactivate(e As EventArgs)
-        MyBase.OnDeactivate(e)
-    End Sub
-
-
-
+    ''' <summary>
+    ''' ???
+    ''' </summary>
     Private Sub prOpenFileFromCmdArgs()
         Dim args As String() = Environment.GetCommandLineArgs()
         If (Not args Is Nothing) AndAlso (args.Length = 2) Then
@@ -414,6 +404,22 @@ Public NotInheritable Class MainForm
             Catch
             End Try
         End If
+    End Sub
+
+
+
+    Protected Overrides Sub OnActivated(e As EventArgs)
+        MyBase.OnActivated(e)
+        'Debug.WriteLine(">>> OnActivated")
+        HotkeyHelper.SetEnabled(True)
+        'WebView2_exta.Activated()
+    End Sub
+
+
+    Protected Overrides Sub OnDeactivate(e As EventArgs)
+        MyBase.OnDeactivate(e)
+        'Debug.WriteLine(">>> OnDeactivate")
+        HotkeyHelper.SetEnabled(False)
     End Sub
 
 

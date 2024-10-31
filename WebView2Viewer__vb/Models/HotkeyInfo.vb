@@ -1,7 +1,6 @@
 ﻿Imports System
 
 
-
 Namespace Models
     Public NotInheritable Class HotkeyInfo
         Public hwnd As IntPtr
